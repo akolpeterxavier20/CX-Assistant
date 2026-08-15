@@ -8,24 +8,41 @@ dotenv.config({ path: fileURLToPath(new URL("./.env", import.meta.url)) });
 
 const app = express();
 const port = process.env.PORT || 4000;
-const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
 
-// Accept both localhost and 127.0.0.1 for local development (Vite may use either)
-const allowedOrigins = new Set([
-  clientOrigin,
-  clientOrigin.replace("localhost", "127.0.0.1")
-]);
+// CLIENT_ORIGIN can be a comma-separated list of allowed origins.
+// e.g. "https://cx-assistant-amber.vercel.app,http://localhost:5173"
+const rawOrigins = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+const allowedOrigins = new Set(
+  rawOrigins
+    .split(",")
+    .flatMap((o) => {
+      const trimmed = o.trim();
+      // Also accept 127.0.0.1 variant for any localhost origin
+      return [trimmed, trimmed.replace("localhost", "127.0.0.1")];
+    })
+    .filter(Boolean)
+);
+
+console.log("Allowed CORS origins:", [...allowedOrigins]);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow non-browser requests like curl/postman (no origin)
+      // Allow non-browser requests (curl, Postman, server-to-server)
       if (!origin) return callback(null, true);
       if (allowedOrigins.has(origin)) return callback(null, true);
-      return callback(new Error("CORS policy: origin not allowed"));
-    }
+      console.warn(`CORS blocked origin: ${origin}`);
+      return callback(new Error(`CORS policy: origin "${origin}" not allowed`));
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: false,
   })
 );
+
+// Respond to preflight OPTIONS for all routes
+app.options("*", cors());
+
 app.use(express.json({ limit: "20kb" }));
 
 app.get("/api/health", (_req, res) => {
