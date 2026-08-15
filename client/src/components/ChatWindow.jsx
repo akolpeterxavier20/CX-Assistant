@@ -10,39 +10,12 @@ import SupportModal from "./SupportModal.jsx";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api/chat";
 
-/** Pre-populated demo conversation */
+/** Clean initial greeting for fresh user session */
 const initialMessages = [
   {
     role: "assistant",
-    content: "Hello! Welcome to CX Assistant. My name is Alex and I'm here to help you today. 😊\n\nHow can I assist you?",
+    content: "Hello! Welcome to CX Assistant. My name is Alex and I'm here to help you today. 😊\n\nHow can I assist you with Union motorcycle financing or customer services?",
     workflow: null,
-  },
-  {
-    role: "user",
-    content: "I want to get a bike on loan.",
-    workflow: null,
-  },
-  {
-    role: "assistant",
-    content: "Sure, I'd be happy to help you with that! Are you looking to apply for a new motorcycle through Union?",
-    workflow: null,
-  },
-  {
-    role: "user",
-    content: "Yes.",
-    workflow: null,
-  },
-  {
-    role: "assistant",
-    content: "Great. I can help you get started. You only need to complete the official application form with your details.",
-    workflow: {
-      action: {
-        url: "https://union-bike-loans.vercel.app/",
-        label: "Open Bike Loan Application ↗",
-        title: "Apply for a Union Bike Loan",
-        description: "Complete the official application form to get started with your motorcycle financing.",
-      },
-    },
   },
 ];
 
@@ -60,8 +33,9 @@ export default function ChatWindow() {
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
   const [quickReplies, setQuickReplies] = useState([
-    "What documents do I need?",
-    "How long does approval take?",
+    "Apply for a bike loan",
+    "Application status",
+    "Contact support",
   ]);
   const listRef = useRef(null);
 
