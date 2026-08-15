@@ -475,28 +475,24 @@ export default function ChatWindow() {
 
           {/* Typing indicator */}
           {isLoading && (
-            <div style={{ display: "flex", alignItems: "flex-end", gap: "10px" }}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px" }}>
               <div
                 style={{
-                  width: "34px",
-                  height: "34px",
-                  borderRadius: "50%",
-                  background: "linear-gradient(135deg, #7c3aed, #5b21b6)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.7rem",
+                  fontSize: "0.72rem",
                   fontWeight: 700,
-                  color: "#fff",
-                  flexShrink: 0,
+                  color: "var(--accent)",
+                  paddingLeft: "4px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
                 }}
               >
-                CX
+                CX Assistant is typing...
               </div>
               <div
                 style={{
-                  background: "var(--agent-bubble)",
+                  background: "var(--surface)",
                   border: "1px solid var(--border)",
+                  borderLeft: "4px solid var(--accent)",
                   borderRadius: "4px 18px 18px 18px",
                   padding: "14px 18px",
                   boxShadow: "var(--shadow-sm)",
