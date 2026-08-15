@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Headphones,
   Plus,
@@ -10,7 +10,9 @@ import {
   Sun,
 } from "lucide-react";
 
-export default function Sidebar({ darkMode, onToggleDark }) {
+export default function Sidebar({ darkMode, onToggleDark, onNewConversation, onOpenSupportModal, onSendQuery }) {
+  const [activeTab, setActiveTab] = useState("conversations");
+
   return (
     <aside
       className="sidebar-panel"
@@ -56,20 +58,41 @@ export default function Sidebar({ darkMode, onToggleDark }) {
 
       {/* ── Navigation ── */}
       <nav style={{ display: "flex", flexDirection: "column", gap: "3px", marginBottom: "20px" }}>
-        <button className="new-convo-btn" style={{ marginBottom: "10px" }}>
+        <button
+          onClick={onNewConversation}
+          className="new-convo-btn"
+          style={{ marginBottom: "10px" }}
+        >
           <Plus size={15} />
           New Conversation
         </button>
 
-        <button className="nav-item active">
+        <button
+          onClick={() => setActiveTab("conversations")}
+          className={`nav-item ${activeTab === "conversations" ? "active" : ""}`}
+        >
           <MessageSquare size={16} />
           Conversations
         </button>
-        <button className="nav-item">
+
+        <button
+          onClick={() => {
+            setActiveTab("help");
+            onOpenSupportModal();
+          }}
+          className={`nav-item ${activeTab === "help" ? "active" : ""}`}
+        >
           <HelpCircle size={16} />
           Help &amp; FAQs
         </button>
-        <button className="nav-item">
+
+        <button
+          onClick={() => {
+            setActiveTab("about");
+            onSendQuery("What can CX Assistant help me with?");
+          }}
+          className={`nav-item ${activeTab === "about" ? "active" : ""}`}
+        >
           <Info size={16} />
           About CX Assistant
         </button>

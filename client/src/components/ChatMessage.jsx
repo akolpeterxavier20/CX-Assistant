@@ -6,7 +6,7 @@ function getTime() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-export default function ChatMessage({ message }) {
+export default function ChatMessage({ message, onOpenLoanModal }) {
   const isUser = message.role === "user";
 
   return (
@@ -71,7 +71,7 @@ export default function ChatMessage({ message }) {
 
             {/* Action card inside assistant bubble */}
             {!isUser && message.workflow?.action && (
-              <ActionCard action={message.workflow.action} />
+              <ActionCard action={message.workflow.action} onOpenLoanModal={onOpenLoanModal} />
             )}
           </div>
 

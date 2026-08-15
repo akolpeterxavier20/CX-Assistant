@@ -1,8 +1,8 @@
 import React from "react";
 import { ExternalLink, Lock, Shield } from "lucide-react";
 
-export default function ActionCard({ action }) {
-  if (!action?.url || !action?.label) return null;
+export default function ActionCard({ action, onOpenLoanModal }) {
+  if (!action?.label) return null;
 
   return (
     <div className="action-card">
@@ -45,17 +45,21 @@ export default function ActionCard({ action }) {
         {action.description || "Complete the official application form to get started."}
       </p>
 
-      {/* CTA Button */}
-      <a
-        href={action.url}
-        target="_blank"
-        rel="noreferrer"
+      {/* CTA Button - Triggers Modal or Navigation smoothly */}
+      <button
+        onClick={() => {
+          if (onOpenLoanModal) {
+            onOpenLoanModal();
+          } else if (action.url && action.url !== "#") {
+            window.open(action.url, "_blank");
+          }
+        }}
         className="action-card-btn"
         id="bike-loan-application-btn"
       >
         <ExternalLink size={15} />
         {action.label}
-      </a>
+      </button>
 
       {/* Security note */}
       <div className="secure-tag">

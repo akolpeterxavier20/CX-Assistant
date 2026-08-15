@@ -2,20 +2,13 @@ import React from "react";
 import { Headphones, Building2, ChevronRight, Phone } from "lucide-react";
 
 const capabilities = [
-  { icon: "📄", label: "Applications & Forms" },
-  { icon: "🛠", label: "Services & Support" },
-  { icon: "ℹ️", label: "General Information" },
-  { icon: "❓", label: "FAQs & Guidance" },
+  { icon: "📄", label: "Applications & Forms", query: "Show me available applications and forms" },
+  { icon: "🛠", label: "Services & Support", query: "What customer services are offered?" },
+  { icon: "ℹ️", label: "General Information", query: "Tell me more about Union financing" },
+  { icon: "❓", label: "FAQs & Guidance", query: "What are the frequently asked questions?" },
 ];
 
-const popularRequests = [
-  { icon: "🏍", label: "Apply for bike loan" },
-  { icon: "📄", label: "Application status" },
-  { icon: "💬", label: "General inquiries" },
-  { icon: "☎", label: "Contact support" },
-];
-
-export default function RightPanel() {
+export default function RightPanel({ onSendQuery, onOpenLoanModal, onOpenSupportModal }) {
   return (
     <aside
       className="right-panel"
@@ -36,10 +29,15 @@ export default function RightPanel() {
 
         <div className="info-card-title" style={{ marginBottom: "6px" }}>I can help with:</div>
         {capabilities.map((c) => (
-          <div key={c.label} className="capability-item">
+          <button
+            key={c.label}
+            onClick={() => onSendQuery(c.query)}
+            className="capability-item"
+            style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%" }}
+          >
             <span style={{ fontSize: "1rem", lineHeight: 1 }}>{c.icon}</span>
             <span>{c.label}</span>
-          </div>
+          </button>
         ))}
       </div>
 
@@ -74,20 +72,57 @@ export default function RightPanel() {
       <div className="info-card">
         <div className="info-card-title">Popular Requests</div>
         <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-          {popularRequests.map((r) => (
-            <button
-              key={r.label}
-              className="popular-item"
-              id={`popular-${r.label.toLowerCase().replace(/\s+/g, "-")}`}
-              style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%" }}
-            >
-              <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{ fontSize: "0.95rem" }}>{r.icon}</span>
-                <span>{r.label}</span>
-              </span>
-              <ChevronRight size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
-            </button>
-          ))}
+          <button
+            onClick={onOpenLoanModal}
+            className="popular-item"
+            id="popular-apply-bike-loan"
+            style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%" }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "0.95rem" }}>🏍</span>
+              <span>Apply for bike loan</span>
+            </span>
+            <ChevronRight size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          </button>
+
+          <button
+            onClick={() => onSendQuery("What is my application status?")}
+            className="popular-item"
+            id="popular-application-status"
+            style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%" }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "0.95rem" }}>📄</span>
+              <span>Application status</span>
+            </span>
+            <ChevronRight size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          </button>
+
+          <button
+            onClick={() => onSendQuery("I have a general inquiry about bike loans.")}
+            className="popular-item"
+            id="popular-general-inquiries"
+            style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%" }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "0.95rem" }}>💬</span>
+              <span>General inquiries</span>
+            </span>
+            <ChevronRight size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          </button>
+
+          <button
+            onClick={onOpenSupportModal}
+            className="popular-item"
+            id="popular-contact-support"
+            style={{ background: "none", border: "none", cursor: "pointer", textAlign: "left", width: "100%" }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ fontSize: "0.95rem" }}>☎</span>
+              <span>Contact support</span>
+            </span>
+            <ChevronRight size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          </button>
         </div>
       </div>
 
@@ -123,7 +158,11 @@ export default function RightPanel() {
           </div>
         </div>
 
-        <button className="contact-btn" id="contact-support-btn">
+        <button
+          onClick={onOpenSupportModal}
+          className="contact-btn"
+          id="contact-support-btn"
+        >
           <Phone size={15} />
           Contact Support
         </button>
