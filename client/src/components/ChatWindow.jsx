@@ -43,7 +43,6 @@ export default function ChatWindow() {
       });
 
       const data = await response.json();
-
       setMessages((current) => [
         ...current,
         {
@@ -52,6 +51,8 @@ export default function ChatWindow() {
           workflow: data.workflow || null
         }
       ]);
+
+      setQuickReplies(Array.isArray(data.suggested_replies) ? data.suggested_replies : []);
     } catch (_error) {
       setMessages((current) => [
         ...current,
@@ -147,6 +148,9 @@ export default function ChatWindow() {
               {messages.map((message, index) => (
                 <ChatMessage key={`${message.role}-${index}`} message={message} />
               ))}
+
+              {/* Quick replies shown under assistant messages */}
+              <QuickReplies suggestions={quickReplies} onSelect={(t) => handleSend(t)} />
 
               {isLoading && (
                 <div className="flex items-start gap-3">

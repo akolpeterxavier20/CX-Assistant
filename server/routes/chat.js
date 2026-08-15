@@ -73,7 +73,11 @@ router.post("/", async (req, res) => {
   const workflow = proposedWorkflow || intentWorkflow || (candidateWorkflows.length === 1 ? candidateWorkflows[0] : null) || confirmedWorkflow;
 
   if (workflow && (confirmedWorkflow || (classification.confidence >= 0.75 && !classification.needs_clarification))) {
-    return res.json({ message: workflow.approved_response, workflow: toClientWorkflow(workflow) });
+    const suggested_replies = Array.isArray(workflow.customer_questions)
+      ? workflow.customer_questions.slice(0, 3)
+      : [];
+
+    return res.json({ message: workflow.approved_response, workflow: toClientWorkflow(workflow), suggested_replies });
   }
 
   // AMBIGUOUS MATCH: only when there are candidate workflows
@@ -82,23 +86,28 @@ router.post("/", async (req, res) => {
     const titles = candidateWorkflows.map((w) => w.title).filter(Boolean);
     const pick = candidateWorkflows[0];
     const question = pick?.customer_questions?.[0] || `Did you mean ${titles.join(" or ")}?`;
-    return res.json({ message: question, workflow: null });
+    // Provide candidate titles as suggested replies to help the user choose
+    const suggested_replies = titles.slice(0, 4);
+    return res.json({ message: question, workflow: null, suggested_replies });
   }
 
   // Single candidate but low confidence or AI asked for clarification -> ask the workflow's clarifying question
   if (candidateWorkflows.length === 1 && (classification.needs_clarification || classification.confidence < 0.75)) {
     const pick = candidateWorkflows[0];
     const question = pick.customer_questions?.[0] || "Can you confirm which of these you mean?";
-    return res.json({ message: question, workflow: null });
+    const suggested_replies = pick.customer_questions ? pick.customer_questions.slice(0, 3) : [];
+    return res.json({ message: question, workflow: null, suggested_replies });
   }
 
   // NO MATCH: explicitly state we don't have a workflow and list available workflows
   const available = summary.map((s) => s.title).filter(Boolean);
   if (available.length) {
     const list = available.join(", ");
+    const suggested_replies = available.slice(0, 6);
     return res.json({
       message: `I don't have a way to help with that here. I can help with ${list} — is one of those what you need?`,
-      workflow: null
+      workflow: null,
+      suggested_replies
     });
   }
 
