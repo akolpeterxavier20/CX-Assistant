@@ -1,0 +1,42 @@
+{
+  "knowledge_base_name": "CX Assistant Knowledge Base",
+  "version": "1.0",
+  "companies": [
+    {
+      "company_id": "union",
+      "company_name": "Union",
+      "description": "Union provides motorcycle-related services including bike financing and loan applications.",
+      "workflows": [
+        {
+          "workflow_id": "union_new_bike_loan",
+          "intent": "new_bike_loan",
+          "title": "Apply for a new bike on loan",
+          "description": "Customer is interested in getting a new motorcycle through a Union bike loan.",
+          "keywords": [
+            "bike loan",
+            "motorcycle loan",
+            "new bike",
+            "get a bike",
+            "buy a bike on loan",
+            "motorcycle financing",
+            "bike financing",
+            "bike on credit",
+            "motorcycle on credit",
+            "I want a bike",
+            "I need a motorcycle"
+          ],
+          "customer_questions": [
+            "Are you interested in getting a new bike on loan?",
+            "Would you like to proceed with the Union bike loan application?"
+          ],
+          "action": {
+            "type": "external_form",
+            "label": "Open Union Bike Loan Application",
+            "url": "https://union-bike-loans.vercel.app/"
+          },
+          "approved_response": "Great. You can complete the Union bike loan application using the form below."
+        }
+      ]
+    }
+  ]
+}
