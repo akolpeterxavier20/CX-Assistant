@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm.cmd run server\" \"npm.cmd run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node --use-system-ca server/server.js",
-    "client": "npm.cmd run dev --prefix client",
-    "build": "npm.cmd run build --prefix client",
+    "client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
     "check": "node --check server/server.js && node --check server/routes/chat.js && node --check server/services/aiService.js && node --check server/services/knowledgeService.js"
   },
   "dependencies": {
