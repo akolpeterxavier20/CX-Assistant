@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node --use-system-ca server/server.js",
     "client": "npm run dev --prefix client",
-    "build": "npm run build --prefix client",
+    "build": "npm install --prefix client && npm run build --prefix client",
     "check": "node --check server/server.js && node --check server/routes/chat.js && node --check server/services/aiService.js && node --check server/services/knowledgeService.js"
   },
   "dependencies": {
