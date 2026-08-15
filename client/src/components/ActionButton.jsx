@@ -1,21 +1,67 @@
 import React from "react";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Lock, Shield } from "lucide-react";
 
-export default function ActionButton({ action, large = false }) {
+export default function ActionCard({ action }) {
   if (!action?.url || !action?.label) return null;
 
-  const base = "inline-flex items-center gap-2 rounded-md text-sm font-semibold text-white transition focus:outline-none focus:ring-2";
-  const sizeClass = large ? "w-full justify-center px-5 py-3 text-base" : "px-4 py-2";
-  const bgClass = "bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-105 transform-gpu";
-
   return (
-    <a
-      href={action.url}
-      target="_blank"
-      rel="noreferrer"
-      className={`${base} ${sizeClass} ${bgClass} shadow-md focus:ring-emerald-200`}>
-      <ExternalLink size={16} aria-hidden="true" />
-      {action.label}
-    </a>
+    <div className="action-card">
+      {/* Card header */}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "10px" }}>
+        <div>
+          <div
+            style={{
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              color: "#7c3aed",
+              marginBottom: "5px",
+            }}
+          >
+            Action Required
+          </div>
+          <div style={{ fontWeight: 700, fontSize: "1rem", color: "var(--text-primary)", lineHeight: 1.3 }}>
+            {action.title || "Apply for a Union Bike Loan"}
+          </div>
+        </div>
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            background: "rgba(124,58,237,0.12)",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <Shield size={18} color="#7c3aed" />
+        </div>
+      </div>
+
+      <p style={{ fontSize: "0.83rem", color: "var(--text-secondary)", marginTop: "8px", lineHeight: 1.6 }}>
+        {action.description || "Complete the official application form to get started."}
+      </p>
+
+      {/* CTA Button */}
+      <a
+        href={action.url}
+        target="_blank"
+        rel="noreferrer"
+        className="action-card-btn"
+        id="bike-loan-application-btn"
+      >
+        <ExternalLink size={15} />
+        {action.label}
+      </a>
+
+      {/* Security note */}
+      <div className="secure-tag">
+        <Lock size={11} />
+        Official application form
+      </div>
+    </div>
   );
 }

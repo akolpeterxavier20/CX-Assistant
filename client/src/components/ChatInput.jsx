@@ -1,42 +1,83 @@
-import React, { useState } from "react";
-import { SendHorizonal } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { SendHorizonal, Paperclip, Smile } from "lucide-react";
 
 export default function ChatInput({ disabled, onSend }) {
   const [value, setValue] = useState("");
+  const textareaRef = useRef(null);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const message = value.trim();
-    if (!message || disabled) return;
-    onSend(message);
+  function autoResize() {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 120) + "px";
+  }
+
+  function handleChange(e) {
+    setValue(e.target.value);
+    autoResize();
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submit();
+    }
+  }
+
+  function submit() {
+    const msg = value.trim();
+    if (!msg || disabled) return;
+    onSend(msg);
     setValue("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   }
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="flex items-center gap-3 border-t border-slate-200 pt-4"
+      onSubmit={(e) => { e.preventDefault(); submit(); }}
+      style={{ display: "flex", flexDirection: "column", gap: "8px" }}
     >
-      <label htmlFor="chat-message" className="sr-only">
-        How can we help you today?
-      </label>
-      <input
-        id="chat-message"
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-        disabled={disabled}
-        placeholder="How can we help you today?"
-        className="min-h-12 flex-1 rounded-md border border-slate-300 bg-white px-4 text-sm outline-none transition focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-slate-100"
-      />
-      <button
-        type="submit"
-        disabled={disabled || !value.trim()}
-        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-emerald-700 px-4 text-sm font-medium text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:bg-slate-300"
-        aria-label="Send message"
-      >
-        <SendHorizonal size={18} aria-hidden="true" />
-        <span className="hidden sm:inline">Send</span>
-      </button>
+      <div className="chat-input-wrap">
+        {/* Icon buttons */}
+        <button type="button" className="chat-icon-btn" aria-label="Attach file" id="attach-file-btn">
+          <Paperclip size={17} />
+        </button>
+        <button type="button" className="chat-icon-btn" aria-label="Emoji" id="emoji-btn">
+          <Smile size={17} />
+        </button>
+
+        {/* Text input */}
+        <textarea
+          ref={textareaRef}
+          id="chat-message-input"
+          value={value}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          placeholder="Type your message here..."
+          rows={1}
+          className="chat-textarea"
+          aria-label="Chat message input"
+          style={{ paddingTop: "8px" }}
+        />
+
+        {/* Send button */}
+        <button
+          type="submit"
+          id="send-message-btn"
+          className="send-btn"
+          disabled={disabled || !value.trim()}
+          aria-label="Send message"
+        >
+          <SendHorizonal size={17} />
+        </button>
+      </div>
+
+      <p style={{ fontSize: "0.68rem", color: "var(--text-muted)", textAlign: "center", margin: 0 }}>
+        Press Enter to send · Shift+Enter for new line
+      </p>
     </form>
   );
 }

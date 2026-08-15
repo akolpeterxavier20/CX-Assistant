@@ -1,9 +1,10 @@
 import React from "react";
 import ChatWindow from "./components/ChatWindow.jsx";
+import "./styles.css";
 
 export default function App() {
   return (
-    <main className="min-h-screen bg-[#f5f7fb] text-slate-950">
+    <main style={{ minHeight: "100vh", background: "var(--surface-alt)" }}>
       <ChatWindow />
     </main>
   );
