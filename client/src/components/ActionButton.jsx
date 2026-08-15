@@ -3,6 +3,7 @@ import { ExternalLink, Lock, Shield } from "lucide-react";
 
 export default function ActionCard({ action, onOpenLoanModal }) {
   if (!action?.label) return null;
+  const targetUrl = action.url && action.url !== "#" ? action.url : "https://union-bike-loans.vercel.app/";
 
   return (
     <div className="action-card">
@@ -45,26 +46,44 @@ export default function ActionCard({ action, onOpenLoanModal }) {
         {action.description || "Complete the official application form to get started."}
       </p>
 
-      {/* CTA Button - Triggers Modal or Navigation smoothly */}
-      <button
-        onClick={() => {
-          if (onOpenLoanModal) {
-            onOpenLoanModal();
-          } else if (action.url && action.url !== "#") {
-            window.open(action.url, "_blank");
-          }
-        }}
-        className="action-card-btn"
-        id="bike-loan-application-btn"
-      >
-        <ExternalLink size={15} />
-        {action.label}
-      </button>
+      {/* CTA Button */}
+      <div style={{ display: "flex", gap: "8px", marginTop: "14px" }}>
+        <button
+          onClick={() => onOpenLoanModal ? onOpenLoanModal(targetUrl) : window.open(targetUrl, "_blank")}
+          className="action-card-btn"
+          style={{ margin: 0, flex: 1 }}
+          id="bike-loan-application-btn"
+        >
+          <ExternalLink size={15} />
+          {action.label}
+        </button>
+
+        <a
+          href={targetUrl}
+          target="_blank"
+          rel="noreferrer"
+          title="Open in new window"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 14px",
+            borderRadius: "9px",
+            border: "1.5px solid var(--accent)",
+            color: "var(--accent)",
+            textDecoration: "none",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+          }}
+        >
+          ↗
+        </a>
+      </div>
 
       {/* Security note */}
       <div className="secure-tag">
         <Lock size={11} />
-        Official application form
+        Official application: {targetUrl}
       </div>
     </div>
   );

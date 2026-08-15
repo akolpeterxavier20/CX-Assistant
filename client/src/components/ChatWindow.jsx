@@ -37,7 +37,7 @@ const initialMessages = [
     content: "Great. I can help you get started. You only need to complete the official application form with your details.",
     workflow: {
       action: {
-        url: "#",
+        url: "https://union-bike-loans.vercel.app/",
         label: "Open Bike Loan Application ↗",
         title: "Apply for a Union Bike Loan",
         description: "Complete the official application form to get started with your motorcycle financing.",
@@ -114,7 +114,7 @@ export default function ChatWindow() {
           content: "Thank you for your request. An official application form link is available below or our human support team can follow up with you.",
           workflow: {
             action: {
-              url: "#",
+              url: "https://union-bike-loans.vercel.app/",
               label: "Open Bike Loan Application ↗",
               title: "Apply for a Union Bike Loan",
               description: "Complete the official application form to get started with your motorcycle financing.",
